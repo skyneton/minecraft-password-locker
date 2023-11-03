@@ -1,0 +1,85 @@
+private: ['[Private]']
+
+password:
+  min_length: 4
+  max_length: 4
+  enable: true
+
+password_gui:
+  title: 'password'
+  separator: ': '
+  password_finish_btn: '§aOK'
+
+# https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+protect_blocks:
+  - anvil
+  - barrel
+  - beacon
+  - black_shulker_box
+  - blast_furnace
+  - blue_shulker_box
+  - brewing_stand
+  - brown_shulker_box
+  - chest
+  - chipped_anvil
+  - cyan_shulker_box
+  - crafting_table
+  - damaged_anvil
+  - dispenser
+  - dropper
+  - enchanting_table
+  - ender_chest
+  - furnace
+  - gray_shulker_box
+  - green_shulker_box
+  - hopper
+  - jukebox
+  - lodestone
+  - light_blue_shulker_box
+  - light_gray_shulker_box
+  - lime_shulker_box
+  - magenta_shulker_box
+  - orange_shulker_box
+  - pink_shulker_box
+  - purple_shulker_box
+  - red_shulker_box
+  - shulker_box
+  - smoker
+  - trapped_chest
+  - white_shulker_box
+  - yellow_shulker_box
+  - acacia_door
+  - bamboo_door
+  - birch_door
+  - cherry_door
+  - crimson_door
+  - dark_oak_door
+  - iron_door
+  - jungle_door
+  - mangrove_door
+  - oak_door
+  - spruce_door
+  - warped_door
+  - acacia_fence_gate
+  - acacia_trapdoor
+  - bamboo_fence_gate
+  - bamboo_trapdoor
+  - birch_fence_gate
+  - birch_trapdoor
+  - cherry_fence_gate
+  - cherry_trapdoor
+  - crimson_fence_gate
+  - crimson_trapdoor
+  - dark_oak_fence_gate
+  - dark_oak_trapdoor
+  - iron_trapdoor
+  - jungle_fence_gate
+  - jungle_trapdoor
+  - mangrove_fence_gate
+  - mangrove_trapdoor
+  - oak_fence_gate
+  - oak_trapdoor
+  - spruce_fence_gate
+  - spruce_trapdoor
+  - warped_fence_gate
+  - warped_trapdoor

@@ -1,0 +1,6 @@
+main: ${main}.Main
+version: $version
+name: $name
+author: skyneton
+
+api-version: 1.13
