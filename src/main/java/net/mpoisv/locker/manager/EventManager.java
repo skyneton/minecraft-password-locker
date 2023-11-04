@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.HangingSign;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.Powerable;
@@ -38,10 +39,9 @@ public class EventManager implements Listener {
                 var placePos = block.getRelative(face.getModX(), 0, face.getModX() == 0 ? face.getModZ() : 0);
                 if(!placePos.isEmpty()) return;
 
-                placePos.setType(Material.OAK_WALL_SIGN);
+                placePos.setType(ProtectionManager.convertToWallSign(event.getItem().getType()));
                 var blockData = (WallSign) placePos.getBlockData();
                 blockData.setFacing(face);
-                placePos.setType(event.getItem().getType());
                 placePos.setBlockData(blockData);
                 var sign = (Sign) placePos.getState();
                 sign.setLine(0, ConfigManager.privateTexts.get(0));

@@ -3,6 +3,7 @@ package net.mpoisv.locker.manager;
 import net.mpoisv.locker.utils.Position;
 import net.mpoisv.locker.utils.Protection;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Door;
@@ -88,6 +89,22 @@ public final class ProtectionManager {
             return list;
         }
         return getConnectedSignBlock(data.getLocation());
+    }
+
+    public static Material convertToWallSign(Material material) {
+        return switch (material) {
+            case ACACIA_SIGN -> Material.ACACIA_WALL_SIGN;
+            case SPRUCE_SIGN -> Material.SPRUCE_WALL_SIGN;
+            case BAMBOO_SIGN -> Material.BAMBOO_WALL_SIGN;
+            case BIRCH_SIGN -> Material.BIRCH_WALL_SIGN;
+            case CRIMSON_SIGN -> Material.CRIMSON_WALL_SIGN;
+            case DARK_OAK_SIGN -> Material.DARK_OAK_WALL_SIGN;
+            case JUNGLE_SIGN -> Material.JUNGLE_WALL_SIGN;
+            case MANGROVE_SIGN -> Material.MANGROVE_WALL_SIGN;
+            case WARPED_SIGN -> Material.WARPED_WALL_SIGN;
+//            case CHERRY_SIGN -> Material.CHERRY_WALL_SIGN;
+            default -> Material.OAK_WALL_SIGN;
+        };
     }
 
     public static List<Block> getBreakableSignNearBy(Block b) {
