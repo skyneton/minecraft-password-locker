@@ -3,6 +3,7 @@ package net.mpoisv.locker;
 import net.mpoisv.locker.manager.ConfigManager;
 import net.mpoisv.locker.manager.DatabaseManager;
 import net.mpoisv.locker.manager.EventManager;
+import net.mpoisv.locker.manager.ProtectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,7 +26,7 @@ public class Main extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
-//        getCommand("plocker");
+        getCommand("plocker");
         Bukkit.getPluginManager().registerEvents(new EventManager(), this);
         loadConfig();
 
@@ -36,6 +37,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         instance = null;
+        ProtectionManager.timerClose();
         try {
             databaseManager.close();
         }catch (Exception e) {
@@ -55,6 +57,7 @@ public class Main extends JavaPlugin {
         ConfigManager.minPasswordLength = getOrDefault(config.getInt("password.min_length"), 4);
         ConfigManager.maxPasswordLength = getOrDefault(config.getInt("password.max_length"), 4);
         ConfigManager.passwordEnabled = getOrDefault(config.getBoolean("password.enable"), true);
+        ConfigManager.passwordAllowTime = getOrDefault(config.getLong("password.correct_allow_time"), 30L);
 
         ConfigManager.guiTitle = getOrDefault(config.getString("password_gui.title"), "password");
         ConfigManager.guiSeparator = getOrDefault(config.getString("password_gui.separator"), ": ");
@@ -65,5 +68,12 @@ public class Main extends JavaPlugin {
             protectList.add(Material.valueOf(m.toUpperCase()));
         }
         ConfigManager.protectBlocks = protectList;
+
+        ConfigManager.langGuiError = getOrDefault(config.getString("lang.gui_error"), "§ePassword Input Error. Maybe private block doesn't exists.");
+        ConfigManager.langPasswordChange = getOrDefault(config.getString("lang.password_change"), "§ePassword Change Completely. Current password: %password%");
+        ConfigManager.langPasswordWrong = getOrDefault(config.getString("lang.password_wrong"), "§ePassword Wrong.");
+        ConfigManager.langPasswordCorrect = getOrDefault(config.getString("lang.password_correct"), "§aPassword Corrected. You allowed use block during %allow-time% minutes.");
+        ConfigManager.langAllowOnlyBlockUse = getOrDefault(config.getString("lang.allow_only_block_use"), "§ePassword Permission User allow only use/break block without sign.");
+        ConfigManager.langPasswordUserSignUse = getOrDefault(config.getString("lang.password_user_sign_use"), "§ePassword Permission User can't use sign for protected block.");
     }
 }

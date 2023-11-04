@@ -4,14 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c1b6068-58d1-408a-b4cd-dcc49cc60e47" name="변경" comment="upload">
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Permissions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ProtectionManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/utils/Protection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="0c1b6068-58d1-408a-b4cd-dcc49cc60e47" name="변경" comment="block protect">
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/commands/PLocker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/utils/LockData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/utils/Position.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ConfigManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ConfigManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/DatabaseManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/PasswordManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/PasswordManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ProtectionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ProtectionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/utils/Protection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/utils/Protection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +94,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.PasswordLocker [build]">
+  <component name="RunManager" selected="Gradle.PasswordLocker [clean]">
     <configuration name="PasswordLocker [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -179,8 +185,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.PasswordLocker [build]" />
         <item itemvalue="Gradle.PasswordLocker [clean]" />
+        <item itemvalue="Gradle.PasswordLocker [build]" />
         <item itemvalue="Gradle.PasswordLocker [jar]" />
         <item itemvalue="Gradle.PasswordLocker [classes]" />
       </list>
@@ -195,7 +201,8 @@
       <option name="presentableId" value="Default" />
       <updated>1699006593504</updated>
       <workItem from="1699006594555" duration="18230000" />
-      <workItem from="1699073235887" duration="5712000" />
+      <workItem from="1699073235887" duration="5789000" />
+      <workItem from="1699092007741" duration="7549000" />
     </task>
     <task id="LOCAL-00001" summary="upload">
       <created>1699025060529</created>
@@ -204,7 +211,14 @@
       <option name="project" value="LOCAL" />
       <updated>1699025060529</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="block protect">
+      <created>1699079407531</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1699079407531</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,6 +226,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="upload" />
-    <option name="LAST_COMMIT_MESSAGE" value="upload" />
+    <MESSAGE value="block protect" />
+    <option name="LAST_COMMIT_MESSAGE" value="block protect" />
   </component>
 </project>

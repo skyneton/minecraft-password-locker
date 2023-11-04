@@ -1,6 +1,6 @@
 package net.mpoisv.locker.manager;
 
-import net.minecraft.util.Tuple;
+import net.mpoisv.locker.utils.Position;
 import net.mpoisv.locker.utils.Protection;
 import org.bukkit.Location;
 import org.bukkit.block.*;
@@ -8,13 +8,38 @@ import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.WallSign;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-public class ProtectionManager {
+public final class ProtectionManager {
     private final static BlockFace[] checkRelativeFaces = new BlockFace[] { BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST };
+    private final static ScheduledExecutorService esTimer = Executors.newSingleThreadScheduledExecutor();
+
+    public final static ConcurrentHashMap<Position, HashSet<UUID>> passwordAllowedPlayers = new ConcurrentHashMap<>();
+
+    public static void timerClose() {
+        esTimer.shutdownNow();
+    }
+
+    public static boolean isAllowPlayer(Position position, UUID player) {
+        var d = passwordAllowedPlayers.get(position);
+        if(d == null) return false;
+        return d.contains(player);
+    }
+
+    public static void addAllowPlayer(Position position, UUID player) {
+        var d = passwordAllowedPlayers.putIfAbsent(position, new HashSet<>());
+        Objects.requireNonNull(d).add(player);
+
+        esTimer.schedule(() -> {
+            var data = passwordAllowedPlayers.get(position);
+            data.remove(player);
+            if(data.isEmpty()) passwordAllowedPlayers.remove(position);
+        }, ConfigManager.passwordAllowTime, TimeUnit.MINUTES);
+    }
 
     public static List<Block> getConnectedSignBlock(Location loc) {
         var b = loc.getBlock();
@@ -65,10 +90,36 @@ public class ProtectionManager {
         return getConnectedSignBlock(data.getLocation());
     }
 
+    public static List<Block> getBreakableSignNearBy(Block b) {
+        var data = b.getState();
+        if(data.getBlockData() instanceof Door) {
+            var aPos = data.getLocation();
+            var bPos = aPos;
+            if(((Door) data.getBlockData()).getHalf() == Bisected.Half.TOP) bPos = aPos.clone().subtract(0, 1, 0);
+            else aPos = aPos.clone().add(0, 1, 0);
+            var list = getConnectedSignBlock(aPos);
+            list.addAll(getConnectedSignBlock(bPos));
+            return list;
+        }
+        return getConnectedSignBlock(data.getLocation());
+    }
+
     public static Protection getPrivateSignNearBy(Block b) {
         var list = new HashSet<Block>();
         var players = new HashSet<String>();
         for(var sign : getSignNearBy(b)) {
+            var lines = ((Sign)sign.getState()).getLines();
+            if(lines.length == 0 || !ConfigManager.privateTexts.contains(lines[0])) continue;
+            list.add(sign);
+            players.addAll(Arrays.asList(lines).subList(1, lines.length));
+        }
+        return new Protection(true, !list.isEmpty(), list, players);
+    }
+
+    public static Protection getBreakablePrivateSignNearBy(Block b) {
+        var list = new HashSet<Block>();
+        var players = new HashSet<String>();
+        for(var sign : getBreakableSignNearBy(b)) {
             var lines = ((Sign)sign.getState()).getLines();
             if(lines.length == 0 || !ConfigManager.privateTexts.contains(lines[0])) continue;
             list.add(sign);
@@ -84,8 +135,8 @@ public class ProtectionManager {
 
         if(ConfigManager.protectBlocks.contains(b.getType())) {
             var target = getPrivateSignNearBy(b);
-            list.addAll(target.getSignData());
-            players.addAll(target.getPlayers());
+            list.addAll(target.signData());
+            players.addAll(target.players());
             targetIsProtect = true;
         }
 
@@ -96,17 +147,40 @@ public class ProtectionManager {
             else
                 b = b.getRelative(((WallSign) bd).getFacing().getOppositeFace());
         }else {
-            if(b.getBlockData() instanceof Door)
-                return new Protection(targetIsProtect, !list.isEmpty(), list, players);
-
             b = b.getRelative(BlockFace.UP);
+            if(!(b.getBlockData() instanceof Door))
+                return new Protection(targetIsProtect, !list.isEmpty(), list, players);
         }
 
         if(ConfigManager.protectBlocks.contains(b.getType())) {
             var target = getPrivateSignNearBy(b);
-            list.addAll(target.getSignData());
-            players.addAll(target.getPlayers());
+            list.addAll(target.signData());
+            players.addAll(target.players());
         }
         return new Protection(targetIsProtect, !list.isEmpty(), list, players);
+    }
+
+    public static Protection getFindBreakablePrivateSign(Block b) {
+        var targetIsProtect = false;
+        var list = new HashSet<Block>();
+        var players = new HashSet<String>();
+
+        if(ConfigManager.protectBlocks.contains(b.getType())) {
+            var target = getBreakablePrivateSignNearBy(b);
+            list.addAll(target.signData());
+            players.addAll(target.players());
+            targetIsProtect = true;
+        }
+        b = b.getRelative(BlockFace.UP);
+        if(ConfigManager.protectBlocks.contains(b.getType()) && b.getBlockData() instanceof Door) {
+            var target = getPrivateSignNearBy(b);
+            list.addAll(target.signData());
+            players.addAll(target.players());
+        }
+        return new Protection(targetIsProtect, !list.isEmpty(), list, players);
+    }
+
+    public static boolean isProtectedPassable(Protection protection, String player) {
+        return !protection.isFind() || protection.players().contains(player);
     }
 }

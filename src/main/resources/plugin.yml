@@ -4,3 +4,8 @@ name: $name
 author: skyneton
 
 api-version: 1.13
+
+commands:
+  plocker:
+    usage: '/plocker help'
+    permission: locker.command.plocker

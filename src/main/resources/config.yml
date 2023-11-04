@@ -1,14 +1,24 @@
-private: ['[Private]']
+private: ['[Private]', '[잠금]']
 
 password:
   min_length: 4
   max_length: 4
   enable: true
+#  if password corrected, player allow use block during {allow time} minutes.
+  correct_allow_time: 30
 
 password_gui:
   title: 'password'
   separator: ': '
   password_finish_btn: '§aOK'
+
+lang:
+  gui_error: "§ePassword Input Error. Maybe private block doesn't exists."
+  password_change: '§ePassword Change Completely. Current password: %password%'
+  password_wrong: '§ePassword Wrong.'
+  password_correct: '§aPassword Corrected. You allowed use block during %allow-time% minutes.'
+  allow_only_block_use: '§ePassword Permission User allow only use/break block without sign.'
+  password_user_sign_use: "§ePassword Permission User can't use sign for protected block."
 
 # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 protect_blocks:

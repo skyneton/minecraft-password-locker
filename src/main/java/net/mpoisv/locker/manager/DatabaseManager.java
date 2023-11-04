@@ -1,5 +1,7 @@
 package net.mpoisv.locker.manager;
 
+import net.mpoisv.locker.utils.LockData;
+import net.mpoisv.locker.utils.Position;
 import org.bukkit.Location;
 
 import java.io.File;
@@ -49,6 +51,7 @@ public class DatabaseManager {
                 "z integer not null," +
                 "world varchar(40) not null," +
                 "password text not null default('0000')," +
+                "strict_lock integer not null check (strict_lock in (0, 1))," +
                 "unique (x, y, z, world));");
         statement.close();
     }
@@ -65,8 +68,24 @@ public class DatabaseManager {
         return result;
     }
 
+    public int insert(int x, int y, int z, UUID world, boolean strictLock) throws SQLException {
+        var ps = connection.prepareStatement("insert into lock(x, y, z, world, strict_lock) values(?, ?, ?, ?, ?)");
+        ps.setInt(1, x);
+        ps.setInt(2, y);
+        ps.setInt(3, z);
+        ps.setString(4, world.toString());
+        ps.setBoolean(5, strictLock);
+        var result = ps.executeUpdate();
+        ps.close();
+        return result;
+    }
+
     public int insert(Location location, String password) throws SQLException {
         return insert(location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getWorld().getUID(), password);
+    }
+
+    public int insert(Location location, boolean strictLock) throws SQLException {
+        return insert(location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getWorld().getUID(), strictLock);
     }
 
     public int delete(int x, int y, int z, UUID world) throws SQLException {
@@ -100,22 +119,44 @@ public class DatabaseManager {
         return update(location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getWorld().getUID(), password);
     }
 
-    public String select(int x, int y, int z, UUID world) throws SQLException {
-        var ps = connection.prepareStatement("select password from lock where x = ? and y = ? and z = ? and world = ?;");
+    public int update(int x, int y, int z, UUID world, boolean strictLock) throws SQLException {
+        var ps = connection.prepareStatement("update lock set strict_lock = ? where x = ? and y = ? and z = ? and world = ?;");
+        ps.setBoolean(1, strictLock);
+        ps.setInt(2, x);
+        ps.setInt(3, y);
+        ps.setInt(4, z);
+        ps.setString(5, world.toString());
+        var result = ps.executeUpdate();
+        ps.close();
+        return result;
+    }
+
+    public int update(Location location, boolean strictLock) throws SQLException {
+        return update(location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getWorld().getUID(), strictLock);
+    }
+
+    public LockData select(int x, int y, int z, UUID world) throws SQLException {
+        var ps = connection.prepareStatement("select password, strict_lock from lock where x = ? and y = ? and z = ? and world = ?;");
         ps.setInt(1, x);
         ps.setInt(2, y);
         ps.setInt(3, z);
         ps.setString(4, world.toString());
         var rs = ps.executeQuery();
         String password = null;
-        if(rs.next())
+        boolean strictLock = false;
+        boolean find = false;
+        if(rs.next()) {
             password = rs.getString(1);
+            strictLock = rs.getBoolean(2);
+            find = true;
+        }
         rs.close();
         ps.close();
-        return password;
+        if(!find) return null;
+        return new LockData(password, strictLock, new Position(x, y, z, world));
     }
 
-    public String select(Location location) throws SQLException {
+    public LockData select(Location location) throws SQLException {
         return select(location.getBlockX(), location.getBlockY(), location.getBlockZ(), location.getWorld().getUID());
     }
 

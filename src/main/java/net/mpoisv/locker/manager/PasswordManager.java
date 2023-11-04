@@ -1,7 +1,6 @@
 package net.mpoisv.locker.manager;
 
 import com.mojang.util.UUIDTypeAdapter;
-import net.minecraft.util.Tuple;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,12 +8,20 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class PasswordManager {
     public static String getPassword(String title) {
         if(title.length() <= ConfigManager.guiTitle.length() + ConfigManager.guiSeparator.length()) return "";
         return title.substring(ConfigManager.guiTitle.length() + ConfigManager.guiSeparator.length());
+    }
+
+    public static boolean isPassword(String realPassword, String password) {
+        if(realPassword != null && realPassword.equals(password)) return true;
+        if(realPassword != null || password.length() != ConfigManager.minPasswordLength) return false;
+        for(char c : password.toCharArray()) if(c != '0') return false;
+        return true;
     }
 
     public static Location getLocation(ItemMeta meta) {
