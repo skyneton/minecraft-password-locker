@@ -30,8 +30,7 @@ public class EventManager implements Listener {
     private void onInteractEvent(PlayerInteractEvent event) {
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         var block = event.getClickedBlock();
-        if(!ConfigManager.protectBlocks.contains(Objects.requireNonNull(block).getType())) return;
-        var protection = ProtectionManager.getPrivateSignNearBy(block);
+        var protection = ProtectionManager.getFindPrivateSignRelative(block);
         var player = event.getPlayer();
         if(!protection.isFind()) {
             if(!player.isSneaking() && event.getItem() != null && event.getItem().getType().toString().endsWith("_SIGN")) {
