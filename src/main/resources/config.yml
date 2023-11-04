@@ -14,7 +14,7 @@ password_gui:
 
 lang:
   gui_error: "§ePassword Input Error. Maybe private block doesn't exists."
-  password_change: '§ePassword Change Completely. Current password: %password%'
+  password_change: '§aPassword Change Completely. Current password: %password%'
   password_wrong: '§ePassword Wrong.'
   password_correct: '§aPassword Corrected. You allowed use block during %allow-time% minutes.'
   allow_only_block_use: '§ePassword Permission User allow only use/break block without sign.'

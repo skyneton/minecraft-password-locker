@@ -1,16 +1,21 @@
 package net.mpoisv.locker;
 
+import net.mpoisv.locker.commands.PLocker;
 import net.mpoisv.locker.manager.ConfigManager;
 import net.mpoisv.locker.manager.DatabaseManager;
 import net.mpoisv.locker.manager.EventManager;
 import net.mpoisv.locker.manager.ProtectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class Main extends JavaPlugin {
     public static Main instance;
@@ -26,12 +31,17 @@ public class Main extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
-        getCommand("plocker");
+        initCommand(Objects.requireNonNull(getCommand("plocker")), new PLocker());
         Bukkit.getPluginManager().registerEvents(new EventManager(), this);
         loadConfig();
 
         Bukkit.getConsoleSender().sendMessage(String.format("§b:§r %s §b:§r Plugin Loading finished. Current version: %s.", getDescription().getName(), getDescription().getVersion()));
         Bukkit.getConsoleSender().sendMessage(String.format("§b:§r %s §b:§r total protected materials: §a%d.", getDescription().getName(), ConfigManager.protectBlocks.size()));
+    }
+
+    private void initCommand(PluginCommand command, CommandExecutor executor) {
+        command.setExecutor(executor);
+        command.setTabCompleter((TabCompleter) executor);
     }
 
     @Override

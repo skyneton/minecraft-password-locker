@@ -58,7 +58,7 @@ public class EventManager implements Listener {
             return;
         }
         var realPermission = protection.players().contains(player.getName()) || player.hasPermission(Permissions.BYPASS_PERMISSION);
-        if(realPermission || protection.targetIsProtectedBlock() && ProtectionManager.isAllowPlayer(Position.CreatePosition(block.getLocation()), player.getUniqueId())) {
+        if(realPermission || protection.targetIsProtectedBlock() && ProtectionManager.isAllowPlayer(Position.CreatePosition(protection.signData().stream().findFirst().get().getLocation()), player.getUniqueId())) {
             if(player.isSneaking() && realPermission) {
                 player.openInventory(PasswordManager.getInventory(protection.signData().stream().findFirst().get().getLocation(), ""));
                 event.setCancelled(true);
@@ -81,7 +81,7 @@ public class EventManager implements Listener {
                     state.update();
                 }
             }
-            if(!realPermission && (event.getItem().getType().toString().endsWith("_SIGN")))  {
+            if(!realPermission && (event.getItem() != null && event.getItem().getType().toString().endsWith("_SIGN")))  {
                 player.sendMessage(ConfigManager.langPasswordUserSignUse);
                 event.setCancelled(true);
             }
@@ -94,11 +94,12 @@ public class EventManager implements Listener {
 
     @EventHandler
     private void onBlockBreakEvent(BlockBreakEvent event) {
+        var data = ProtectionManager.getFindPrivateSignRelative(event.getBlock());
         var realPermission = event.getPlayer().hasPermission(Permissions.BYPASS_PERMISSION)
-                || ProtectionManager.isProtectedPassable(ProtectionManager.getFindPrivateSignRelative(event.getBlock()), event.getPlayer().getName());
+                || ProtectionManager.isProtectedPassable(data, event.getPlayer().getName());
         if(realPermission
-                || ProtectionManager.isAllowPlayer(Position.CreatePosition(event.getBlock().getLocation()), event.getPlayer().getUniqueId())) {
-            var data = ProtectionManager.getFindBreakablePrivateSign(event.getBlock());
+                || ProtectionManager.isAllowPlayer(Position.CreatePosition(data.signData().stream().findFirst().get().getLocation()), event.getPlayer().getUniqueId())) {
+            data = ProtectionManager.getFindBreakablePrivateSign(event.getBlock());
             if(!realPermission && !data.targetIsProtectedBlock()) {
                 event.getPlayer().sendMessage(ConfigManager.langAllowOnlyBlockUse);
                 event.setCancelled(true);
@@ -143,7 +144,6 @@ public class EventManager implements Listener {
 
     @EventHandler
     private void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
-        Bukkit.broadcastMessage("onEntityChangeBlockEvent");
         if(!ProtectionManager.getFindPrivateSignRelative(event.getBlock()).isFind()) return;
         event.setCancelled(true);
     }
@@ -156,7 +156,6 @@ public class EventManager implements Listener {
     @EventHandler
     private void onStructureGrowEvent(StructureGrowEvent event) {
         if(event.getPlayer() != null && event.getPlayer().hasPermission(Permissions.BYPASS_PERMISSION)) return;
-        Bukkit.broadcastMessage("StructureGrow");
         event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block.getBlock()).isFind());
     }
 
@@ -219,11 +218,7 @@ public class EventManager implements Listener {
             player.sendMessage(ConfigManager.langPasswordChange.replace("%password%", password));
             return;
         }
-        if(selectData == null) {
-            player.sendMessage(ConfigManager.langPasswordChange.replace("%password%", password));
-            return;
-        }
-        if(selectData.strictLock() || !PasswordManager.isPassword(selectData.password(), password)) {
+        if(selectData != null && selectData.strictLock() || !PasswordManager.isPassword(selectData == null ? null : selectData.password(), password)) {
             player.sendMessage(ConfigManager.langPasswordWrong);
             return;
         }

@@ -1,6 +1,7 @@
 package net.mpoisv.locker.commands;
 
 import net.mpoisv.locker.Main;
+import net.mpoisv.locker.manager.ConfigManager;
 import net.mpoisv.locker.manager.ProtectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,6 +22,7 @@ public class PLocker implements CommandExecutor, TabCompleter {
         switch(args[0].toLowerCase()) {
             case "help" -> { return helpMessage(sender, s); }
             case "strictlock" -> { return strictLock(sender, args); }
+            case "passwordenable" -> { return passwordEnable(sender, args); }
         }
         return false;
     }
@@ -30,6 +32,26 @@ public class PLocker implements CommandExecutor, TabCompleter {
         sender.sendMessage(String.format("§b:§r %s §b: §a%s§r - VER. §c%s", desc.getName(), desc.getDescription(), desc.getVersion()));
         sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " help");
         sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " strictlock [x y z] - can't use password look or position block.");
+        sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " passwordenable [true/false]");
+        return true;
+    }
+
+    private boolean passwordEnable(CommandSender sender, String[] args) {
+        var to = !ConfigManager.passwordEnabled;
+        if(args.length >= 2) {
+            switch(args[1].toLowerCase()) {
+                case "0", "false" -> to = false;
+                case "1", "true" -> to = true;
+                default -> {
+                    sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b:§r must be true or false.");
+                    return false;
+                }
+            }
+        }
+        sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b:§r changed to " + ConfigManager.passwordEnabled + " -> " + to);
+        ConfigManager.passwordEnabled = to;
+        Main.instance.getConfig().set("password.enable", ConfigManager.passwordEnabled);
+        Main.instance.saveConfig();
         return true;
     }
 
@@ -38,7 +60,7 @@ public class PLocker implements CommandExecutor, TabCompleter {
             sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b: §r this command can use only player.");
             return true;
         }
-        if(args.length >= 2 && args.length != 4) {
+        if(args.length >= 2 && args.length != 5) {
             sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b: §rif you use position, you should input x y z value.");
             return true;
         }
@@ -75,11 +97,11 @@ public class PLocker implements CommandExecutor, TabCompleter {
         }
         var protection = ProtectionManager.getFindPrivateSignRelative(new Location(((Player) sender).getWorld(), x, y, z).getBlock());
         if(!protection.isFind()) {
-            sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b: It's not protected block.");
+            sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b:§r It's not protected block.");
             return true;
         }
         if(!protection.players().contains(sender.getName())) {
-            sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b: You wasn't contains protect group in protected block.");
+            sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b:§r You wasn't contains protect group in protected block.");
             return true;
         }
         var loc = protection.signData().stream().findFirst().get().getLocation();
@@ -93,15 +115,20 @@ public class PLocker implements CommandExecutor, TabCompleter {
             sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b: Error.");
             return true;
         }
-        sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b: Protected block changed to strict lock mode.");
+        sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b:§r Protected block changed to strict lock mode.");
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
         switch(args.length) {
-            case 1 -> { return Arrays.asList("help", "strictlock"); }
-            case 2 -> { if(args[0].equalsIgnoreCase("strictlock")) return List.of("~"); }
+            case 1 -> { return Arrays.asList("help", "strictlock", "passwordenable"); }
+            case 2 -> {
+                switch(args[0].toLowerCase()) {
+                    case "strictlock" -> { return List.of("~"); }
+                    case "passwordenable" -> { return Arrays.asList("true", "false"); }
+                }
+            }
             case 3 -> { if(args[0].equalsIgnoreCase("strictlock")) return List.of("~"); }
             case 4 -> { if(args[0].equalsIgnoreCase("strictlock")) return List.of("~"); }
         }

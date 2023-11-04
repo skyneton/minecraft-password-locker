@@ -51,7 +51,7 @@ public class DatabaseManager {
                 "z integer not null," +
                 "world varchar(40) not null," +
                 "password text not null default('0000')," +
-                "strict_lock integer not null check (strict_lock in (0, 1))," +
+                "strict_lock integer not null check (strict_lock in (0, 1)) default(0)," +
                 "unique (x, y, z, world));");
         statement.close();
     }

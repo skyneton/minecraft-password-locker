@@ -31,7 +31,7 @@ public final class ProtectionManager {
     }
 
     public static void addAllowPlayer(Position position, UUID player) {
-        var d = passwordAllowedPlayers.putIfAbsent(position, new HashSet<>());
+        var d = passwordAllowedPlayers.computeIfAbsent(position, k -> new HashSet<>());
         Objects.requireNonNull(d).add(player);
 
         esTimer.schedule(() -> {
