@@ -1,34 +1,35 @@
 package net.mpoisv.locker.manager;
 
-import net.minecraft.world.item.ItemSign;
-import org.bukkit.Bukkit;
+import net.mpoisv.locker.Permissions;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.Powerable;
-import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.material.MaterialData;
+
+import java.util.Objects;
 
 public class EventManager implements Listener {
     @EventHandler
     private void onInteractEvent(PlayerInteractEvent event) {
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         var block = event.getClickedBlock();
-        if(!ConfigManager.protectBlocks.contains(block.getType())) return;
-        var signs = PasswordManager.getPrivateSignNearBy(block);
+        if(!ConfigManager.protectBlocks.contains(Objects.requireNonNull(block).getType())) return;
+        var protection = ProtectionManager.getPrivateSignNearBy(block);
         var player = event.getPlayer();
-        if(signs.a().isEmpty()) {
+        if(!protection.getIsFind()) {
             if(!player.isSneaking() && event.getItem() != null && event.getItem().getType().toString().endsWith("_SIGN")) {
                 var face = player.getFacing().getOppositeFace();
                 var placePos = block.getRelative(face.getModX(), 0, face.getModX() == 0 ? face.getModZ() : 0);
@@ -43,13 +44,18 @@ public class EventManager implements Listener {
                 sign.setLine(0, ConfigManager.privateTexts.get(0));
                 sign.setLine(1, event.getPlayer().getName());
                 sign.update();
+
+                if(player.getGameMode() != GameMode.CREATIVE) {
+                    event.getItem().setAmount(event.getItem().getAmount() - 1);
+                }
+
                 event.setCancelled(true);
             }
             return;
         }
-        if(signs.b().contains(player.getName())) {
+        if(protection.getPlayers().contains(player.getName()) || event.getPlayer().hasPermission(Permissions.BYPASS_PERMISSION)) {
             if(player.isSneaking()) {
-                player.openInventory(PasswordManager.getInventory(signs.a().get(0).getLocation(), ""));
+                player.openInventory(PasswordManager.getInventory(protection.getSignData().stream().findFirst().get().getLocation(), ""));
                 event.setCancelled(true);
                 return;
             }
@@ -77,7 +83,56 @@ public class EventManager implements Listener {
 
     @EventHandler
     private void onBlockBreakEvent(BlockBreakEvent event) {
+        if(event.getPlayer().hasPermission(Permissions.BYPASS_PERMISSION)) return;
+        var protection = ProtectionManager.getFindPrivateSignRelative(event.getBlock());
+        if(!protection.getIsFind() || protection.getPlayers().contains(event.getPlayer().getName())) return;
+        event.setCancelled(true);
+    }
 
+    @EventHandler
+    private void onBlockExplodeEvent(BlockExplodeEvent event) {
+        event.blockList().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).getIsFind());
+    }
+
+    @EventHandler
+    private void onBlockBurnEvent(BlockBurnEvent event) {
+        if(!ProtectionManager.getFindPrivateSignRelative(event.getBlock()).getIsFind()) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    private void onBlockPistonExtendEvent(BlockPistonExtendEvent event) {
+        event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).getIsFind());
+    }
+
+    @EventHandler
+    private void onBlockPistonRetractEvent(BlockPistonRetractEvent event) {
+        event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).getIsFind());
+    }
+
+    @EventHandler
+    private void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
+        if(!ProtectionManager.getFindPrivateSignRelative(event.getBlock()).getIsFind()) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    private void onEntityExplodeEvent(EntityExplodeEvent event) {
+        event.blockList().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).getIsFind());
+    }
+
+    @EventHandler
+    private void onStructureGrowEvent(StructureGrowEvent event) {
+        if(event.getPlayer() != null && event.getPlayer().hasPermission(Permissions.BYPASS_PERMISSION)) return;
+        event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block.getBlock()).getIsFind());
+    }
+
+    @EventHandler
+    private void onBlockPoweredEvent(BlockRedstoneEvent event) {
+        if(event.getNewCurrent() == event.getOldCurrent()) return;
+        var signs = ProtectionManager.getPrivateSignNearBy(event.getBlock());
+        if(!signs.getIsFind()) return;
+        event.setNewCurrent(event.getOldCurrent());
     }
 
     @EventHandler
@@ -87,11 +142,11 @@ public class EventManager implements Listener {
         if(event.getView().getTopInventory() != event.getClickedInventory() || event.getSlot() < 12) return;
         var password = PasswordManager.getPassword(event.getView().getTitle());
         if(event.getSlot() < 41) {
-            var number = event.getCurrentItem().getItemMeta().getDisplayName().substring(2);
+            var number = Objects.requireNonNull(event.getCurrentItem().getItemMeta()).getDisplayName().substring(2);
             password += number;
             ((Player)event.getWhoClicked()).playSound(event.getWhoClicked(), Sound.UI_BUTTON_CLICK, 1, 1);
             if(password.length() < ConfigManager.maxPasswordLength) {
-                event.getWhoClicked().openInventory(PasswordManager.getInventory(PasswordManager.getLocation(event.getClickedInventory().getItem(0).getItemMeta()), password));
+                event.getWhoClicked().openInventory(PasswordManager.getInventory(Objects.requireNonNull(PasswordManager.getLocation(Objects.requireNonNull(Objects.requireNonNull(event.getClickedInventory().getItem(0)).getItemMeta()))), password));
                 return;
             }
         }
