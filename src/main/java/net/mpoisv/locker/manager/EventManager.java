@@ -33,7 +33,7 @@ public class EventManager implements Listener {
         var protection = ProtectionManager.getFindPrivateSignRelative(block);
         var player = event.getPlayer();
         if(!protection.isFind()) {
-            if(!player.isSneaking() && event.getItem() != null && event.getItem().getType().toString().endsWith("_SIGN")) {
+            if(!player.isSneaking() && event.getItem() != null && event.getItem().getType().toString().endsWith("_SIGN") && ConfigManager.protectBlocks.contains(Objects.requireNonNull(block).getType())) {
                 var face = player.getFacing().getOppositeFace();
                 var placePos = block.getRelative(face.getModX(), 0, face.getModX() == 0 ? face.getModZ() : 0);
                 if(!placePos.isEmpty()) return;
