@@ -18,8 +18,8 @@ public class PasswordManager {
     }
 
     public static boolean isPassword(String realPassword, String password) {
-        if(realPassword != null && realPassword.equals(password)) return true;
-        if(realPassword != null || password.length() != ConfigManager.minPasswordLength) return false;
+        if(realPassword != null && realPassword.length() >= ConfigManager.minPasswordLength && realPassword.length() <= ConfigManager.maxPasswordLength && realPassword.equals(password)) return true;
+        if(realPassword != null && realPassword.length() >= ConfigManager.minPasswordLength && realPassword.length() <= ConfigManager.maxPasswordLength || password.length() != ConfigManager.minPasswordLength) return false;
         for(char c : password.toCharArray()) if(c != '0') return false;
         return true;
     }

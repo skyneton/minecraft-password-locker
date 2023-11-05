@@ -6,9 +6,7 @@ import net.mpoisv.locker.utils.LockData;
 import net.mpoisv.locker.utils.Position;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.HangingSign;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.Powerable;
@@ -20,6 +18,7 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -89,6 +88,22 @@ public class EventManager implements Listener {
         event.setCancelled(true);
         if(ConfigManager.passwordEnabled)
             player.openInventory(PasswordManager.getInventory(protection.signData().stream().findFirst().get().getLocation(), ""));
+    }
+
+    @EventHandler
+    private void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
+        var from = event.getSource();
+        var to = event.getDestination();
+        if(from == null) return;
+        var fromProtect = ProtectionManager.getFindPrivateSignRelative(from.getLocation().getBlock());
+        if(to == null) {
+            if(fromProtect.isFind())
+                event.setCancelled(true);
+            return;
+        }
+        var toProtect = ProtectionManager.getFindPrivateSignRelative(to.getLocation().getBlock());
+        if(toProtect.players().containsAll(fromProtect.players())) return;
+        event.setCancelled(true);
     }
 
     @EventHandler
