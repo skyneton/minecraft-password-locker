@@ -2,6 +2,7 @@ package net.mpoisv.locker.manager;
 
 import net.mpoisv.locker.Main;
 import net.mpoisv.locker.Permissions;
+import net.mpoisv.locker.VersionChecker;
 import net.mpoisv.locker.utils.LockData;
 import net.mpoisv.locker.utils.Position;
 import org.bukkit.Bukkit;
@@ -20,12 +21,20 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.Objects;
 
 public class EventManager implements Listener {
+    @EventHandler
+    private void onPlayerJoin(PlayerJoinEvent event) {
+        if(ConfigManager.updateCheck && event.getPlayer().hasPermission(Permissions.UPDATE_INFO_PERMISSION) && !VersionChecker.isLatestVersion(Main.instance.getDescription().getVersion())) {
+            event.getPlayer().sendMessage(String.format("§b:§r %s §b:§e Latest version: %s. Update please.", Main.instance.getDescription().getName(), VersionChecker.getVersionCode()));
+            event.getPlayer().sendMessage(String.format("§b:§r %s §b:§e https://www.spigotmc.org/resources/passwordlocker.113386/", Main.instance.getDescription().getName()));
+        }
+    }
     @EventHandler
     private void onInteractEvent(PlayerInteractEvent event) {
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
@@ -94,15 +103,10 @@ public class EventManager implements Listener {
     private void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
         var from = event.getSource();
         var to = event.getDestination();
-        if(from == null) return;
         var fromProtect = ProtectionManager.getFindPrivateSignRelative(from.getLocation().getBlock());
-        if(to == null) {
-            if(fromProtect.isFind())
-                event.setCancelled(true);
-            return;
-        }
+        if(!fromProtect.isFind()) return;
         var toProtect = ProtectionManager.getFindPrivateSignRelative(to.getLocation().getBlock());
-        if(toProtect.players().containsAll(fromProtect.players())) return;
+        if(toProtect.players().containsAll(fromProtect.players()) && fromProtect.players().size() == toProtect.players().size()) return;
         event.setCancelled(true);
     }
 

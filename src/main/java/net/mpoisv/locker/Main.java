@@ -24,7 +24,6 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-
         try {
             databaseManager = new DatabaseManager(getDataFolder().getAbsolutePath(), "locker.db");
         }catch (SQLException e) {
@@ -35,8 +34,15 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EventManager(), this);
         loadConfig();
 
+        if(ConfigManager.updateCheck)
+            VersionChecker.getLatestVersionFromServer();
+
         Bukkit.getConsoleSender().sendMessage(String.format("§b:§r %s §b:§r Plugin Loading finished. Current version: %s.", getDescription().getName(), getDescription().getVersion()));
         Bukkit.getConsoleSender().sendMessage(String.format("§b:§r %s §b:§r total protected materials: §a%d.", getDescription().getName(), ConfigManager.protectBlocks.size()));
+        if(!VersionChecker.isLatestVersion(getDescription().getVersion())) {
+            Bukkit.getConsoleSender().sendMessage(String.format("§b:§r %s §b:§e Latest version: %s. Update please.", getDescription().getName(), VersionChecker.getVersionCode()));
+            Bukkit.getConsoleSender().sendMessage(String.format("§b:§r %s §b:§e https://www.spigotmc.org/resources/passwordlocker.113386/", getDescription().getName()));
+        }
     }
 
     private void initCommand(PluginCommand command, CommandExecutor executor) {
@@ -78,6 +84,12 @@ public class Main extends JavaPlugin {
             protectList.add(Material.valueOf(m.toUpperCase()));
         }
         ConfigManager.protectBlocks = protectList;
+
+        if(!config.contains("update_check")) {
+            config.set("update_check", true);
+            saveConfig();
+        }
+        ConfigManager.updateCheck = getOrDefault(config.getBoolean("update_check"), true);
 
         ConfigManager.langGuiError = getOrDefault(config.getString("lang.gui_error"), "§ePassword Input Error. Maybe private block doesn't exists.");
         ConfigManager.langPasswordChange = getOrDefault(config.getString("lang.password_change"), "§ePassword Change Completely. Current password: %password%");

@@ -10,6 +10,7 @@ public class ConfigManager {
     public static int minPasswordLength, maxPasswordLength;
     public static boolean passwordEnabled;
     public static long passwordAllowTime;
+    public static boolean updateCheck;
     public static String guiTitle, guiSeparator, guiPasswordFinishBtn;
     public static HashSet<Material> protectBlocks;
 

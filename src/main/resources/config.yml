@@ -12,6 +12,8 @@ password_gui:
   separator: ': '
   password_finish_btn: '§aOK'
 
+update_check: true
+
 lang:
   gui_error: "§ePassword Input Error. Maybe private block doesn't exists."
   password_change: '§aPassword Change Completely. Current password: %password%'

@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c1b6068-58d1-408a-b4cd-dcc49cc60e47" name="변경" comment="sign to wall sign">
+    <list default="true" id="0c1b6068-58d1-408a-b4cd-dcc49cc60e47" name="변경" comment="hopper &amp; password bug fix">
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/VersionChecker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Permissions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Permissions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/commands/PLocker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/commands/PLocker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ConfigManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ConfigManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/PasswordManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/PasswordManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,7 +200,8 @@
       <workItem from="1699073235887" duration="5789000" />
       <workItem from="1699092007741" duration="14250000" />
       <workItem from="1699151935100" duration="124000" />
-      <workItem from="1699162890808" duration="864000" />
+      <workItem from="1699162890808" duration="1063000" />
+      <workItem from="1699332601676" duration="2125000" />
     </task>
     <task id="LOCAL-00001" summary="upload">
       <created>1699025060529</created>
@@ -253,7 +259,14 @@
       <option name="project" value="LOCAL" />
       <updated>1699107489969</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="hopper &amp; password bug fix">
+      <created>1699163957480</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1699163957480</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -264,6 +277,7 @@
     <MESSAGE value="block protect" />
     <MESSAGE value="password lock" />
     <MESSAGE value="sign to wall sign" />
-    <option name="LAST_COMMIT_MESSAGE" value="sign to wall sign" />
+    <MESSAGE value="hopper &amp; password bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="hopper &amp; password bug fix" />
   </component>
 </project>

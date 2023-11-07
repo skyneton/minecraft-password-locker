@@ -1,6 +1,8 @@
 package net.mpoisv.locker.commands;
 
 import net.mpoisv.locker.Main;
+import net.mpoisv.locker.Permissions;
+import net.mpoisv.locker.VersionChecker;
 import net.mpoisv.locker.manager.ConfigManager;
 import net.mpoisv.locker.manager.ProtectionManager;
 import org.bukkit.Bukkit;
@@ -29,10 +31,14 @@ public class PLocker implements CommandExecutor, TabCompleter {
 
     private boolean helpMessage(CommandSender sender, String label) {
         var desc = Main.instance.getDescription();
-        sender.sendMessage(String.format("§b:§r %s §b: §a%s§r - VER. §c%s", desc.getName(), desc.getDescription(), desc.getVersion()));
+        sender.sendMessage(String.format("§b:§r %s §b: §a%s§r - VER. §c%s", desc.getName(), desc.getFullName(), desc.getVersion()));
         sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " help");
         sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " strictlock [x y z] - can't use password look or position block.");
         sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " passwordenable [true/false]");
+        if(ConfigManager.updateCheck && sender.hasPermission(Permissions.UPDATE_INFO_PERMISSION) && !VersionChecker.isLatestVersion(Main.instance.getDescription().getVersion())) {
+            sender.sendMessage(String.format("§b:§r %s §b:§e Latest version: %s. Update please.", Main.instance.getDescription().getName(), VersionChecker.getVersionCode()));
+            sender.sendMessage(String.format("§b:§r %s §b:§e https://www.spigotmc.org/resources/passwordlocker.113386/", Main.instance.getDescription().getName()));
+        }
         return true;
     }
 
