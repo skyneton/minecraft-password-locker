@@ -37,7 +37,7 @@ public class EventManager implements Listener {
     }
     @EventHandler
     private void onInteractEvent(PlayerInteractEvent event) {
-        if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if(event.getAction() != Action.RIGHT_CLICK_BLOCK || ConfigManager.disableWorlds.contains(event.getPlayer().getWorld().getName())) return;
         var block = event.getClickedBlock();
         var protection = ProtectionManager.getFindPrivateSignRelative(block);
         var player = event.getPlayer();
@@ -101,17 +101,19 @@ public class EventManager implements Listener {
 
     @EventHandler
     private void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
-        var from = event.getSource();
-        var to = event.getDestination();
-        var fromProtect = ProtectionManager.getFindPrivateSignRelative(from.getLocation().getBlock());
+        var from = event.getSource().getLocation();
+        var to = event.getDestination().getLocation();
+        if(ConfigManager.disableWorlds.contains(from.getWorld().getName()) || ConfigManager.disableWorlds.contains(to.getWorld().getName())) return;
+        var fromProtect = ProtectionManager.getFindPrivateSignRelative(from.getBlock());
         if(!fromProtect.isFind()) return;
-        var toProtect = ProtectionManager.getFindPrivateSignRelative(to.getLocation().getBlock());
+        var toProtect = ProtectionManager.getFindPrivateSignRelative(to.getBlock());
         if(toProtect.players().containsAll(fromProtect.players()) && fromProtect.players().size() == toProtect.players().size()) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     private void onBlockBreakEvent(BlockBreakEvent event) {
+        if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
         var data = ProtectionManager.getFindPrivateSignRelative(event.getBlock());
         var realPermission = event.getPlayer().hasPermission(Permissions.BYPASS_PERMISSION)
                 || ProtectionManager.isProtectedPassable(data, event.getPlayer().getName());
@@ -141,45 +143,50 @@ public class EventManager implements Listener {
 
     @EventHandler
     private void onBlockExplodeEvent(BlockExplodeEvent event) {
+        if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
         event.blockList().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
     }
 
     @EventHandler
     private void onBlockBurnEvent(BlockBurnEvent event) {
+        if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
         if(!ProtectionManager.getFindPrivateSignRelative(event.getBlock()).isFind()) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     private void onBlockPistonExtendEvent(BlockPistonExtendEvent event) {
+        if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
         event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
     }
 
     @EventHandler
     private void onBlockPistonRetractEvent(BlockPistonRetractEvent event) {
+        if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
         event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
     }
 
     @EventHandler
     private void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
-        if(!ProtectionManager.getFindPrivateSignRelative(event.getBlock()).isFind()) return;
+        if(!ProtectionManager.getFindPrivateSignRelative(event.getBlock()).isFind() || ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     private void onEntityExplodeEvent(EntityExplodeEvent event) {
+        if(ConfigManager.disableWorlds.contains(event.getLocation().getWorld().getName())) return;
         event.blockList().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
     }
 
     @EventHandler
     private void onStructureGrowEvent(StructureGrowEvent event) {
-        if(event.getPlayer() != null && event.getPlayer().hasPermission(Permissions.BYPASS_PERMISSION)) return;
+        if(event.getPlayer() != null && event.getPlayer().hasPermission(Permissions.BYPASS_PERMISSION) || ConfigManager.disableWorlds.contains(event.getLocation().getWorld().getName())) return;
         event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block.getBlock()).isFind());
     }
 
     @EventHandler
     private void onBlockPoweredEvent(BlockRedstoneEvent event) {
-        if(event.getNewCurrent() == event.getOldCurrent()) return;
+        if(event.getNewCurrent() == event.getOldCurrent() || ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
         var signs = ProtectionManager.getPrivateSignNearBy(event.getBlock());
         if(!signs.isFind()) return;
         event.setNewCurrent(event.getOldCurrent());

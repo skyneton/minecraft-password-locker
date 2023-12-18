@@ -1,10 +1,10 @@
 package net.mpoisv.locker;
 
-import jline.internal.Log;
 import org.bukkit.Bukkit;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.System.Logger.Level;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -35,8 +35,7 @@ public final class VersionChecker {
                 }
             }
         }catch(Exception e) {
-            Bukkit.getConsoleSender().sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b:§r Can't bring latest version.");
-            Log.error(e);
+            Main.instance.getLogger().warning(e.toString());
         }
     }
 }

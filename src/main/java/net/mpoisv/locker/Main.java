@@ -97,5 +97,14 @@ public class Main extends JavaPlugin {
         ConfigManager.langPasswordCorrect = getOrDefault(config.getString("lang.password_correct"), "§aPassword Corrected. You allowed use block during %allow-time% minutes.");
         ConfigManager.langAllowOnlyBlockUse = getOrDefault(config.getString("lang.allow_only_block_use"), "§ePassword Permission User allow only use/break block without sign.");
         ConfigManager.langPasswordUserSignUse = getOrDefault(config.getString("lang.password_user_sign_use"), "§ePassword Permission User can't use sign for protected block.");
+
+        if(!config.contains("lang.world_empty")) {
+            config.set("world_empty", "§c%world% is not a world.");
+            saveConfig();
+        }
+        ConfigManager.langEmptyWorld = getOrDefault(config.getString("lang.world_empty"), "§c%world% is not a world.");
+
+        ConfigManager.disableWorlds.clear();
+        ConfigManager.disableWorlds.addAll(config.getStringList("disable_worlds"));
     }
 }

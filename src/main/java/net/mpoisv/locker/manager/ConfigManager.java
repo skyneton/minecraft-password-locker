@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class ConfigManager {
+    public static HashSet<String> disableWorlds;
     public static List<String> privateTexts;
     public static int minPasswordLength, maxPasswordLength;
     public static boolean passwordEnabled;
@@ -20,4 +21,5 @@ public class ConfigManager {
     public static String langPasswordCorrect;
     public static String langAllowOnlyBlockUse;
     public static String langPasswordUserSignUse;
+    public static String langEmptyWorld;
 }

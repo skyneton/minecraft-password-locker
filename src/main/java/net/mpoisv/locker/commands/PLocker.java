@@ -7,11 +7,14 @@ import net.mpoisv.locker.manager.ConfigManager;
 import net.mpoisv.locker.manager.ProtectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.WorldInfo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,8 +28,41 @@ public class PLocker implements CommandExecutor, TabCompleter {
             case "help" -> { return helpMessage(sender, s); }
             case "strictlock" -> { return strictLock(sender, args); }
             case "passwordenable" -> { return passwordEnable(sender, args); }
+            case "disableworld" -> {return disableWorld(sender, args); }
         }
         return false;
+    }
+
+    private boolean disableWorld(CommandSender sender, String[] args) {
+        World world = null;
+        var worldName = "";
+        if(args.length >= 2) {
+            world = Bukkit.getWorld(args[1]);
+            worldName = args[1];
+        }else if(sender instanceof Entity) {
+            world = ((Entity) sender).getWorld();
+        }
+        if(world == null) {
+            sender.sendMessage(String.format("§b:§r %s §b:§f %s", Main.instance.getDescription().getName(), ConfigManager.langEmptyWorld.replace("%world%", worldName)));
+            var builder = new StringBuilder();
+            for(World w : Bukkit.getWorlds()) {
+                if(!builder.isEmpty()) builder.append(", ");
+                builder.append(w.getName());
+            }
+            sender.sendMessage("Worlds: ", builder.toString());
+            return true;
+        }
+        if(ConfigManager.disableWorlds.contains(world.getName())) {
+            ConfigManager.disableWorlds.remove(world.getName());
+            sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b:§f "+ world.getName() +" is prevented now.");
+        }else {
+            ConfigManager.disableWorlds.add(world.getName());
+            sender.sendMessage("§b:§r " + Main.instance.getDescription().getName() + " §b:§f "+ world.getName() +" is not prevent work now.");
+        }
+
+        Main.instance.getConfig().set("disable_worlds", ConfigManager.disableWorlds);
+        Main.instance.saveConfig();
+        return true;
     }
 
     private boolean helpMessage(CommandSender sender, String label) {
@@ -35,6 +71,7 @@ public class PLocker implements CommandExecutor, TabCompleter {
         sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " help");
         sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " strictlock [x y z] - can't use password look or position block.");
         sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " passwordenable [true/false]");
+        sender.sendMessage("§b:§r " + desc.getName() + " §b: §r/" + label + " disableworld [world]");
         if(ConfigManager.updateCheck && sender.hasPermission(Permissions.UPDATE_INFO_PERMISSION) && !VersionChecker.isLatestVersion(Main.instance.getDescription().getVersion())) {
             sender.sendMessage(String.format("§b:§r %s §b:§e Latest version: %s. Update please.", Main.instance.getDescription().getName(), VersionChecker.getVersionCode()));
             sender.sendMessage(String.format("§b:§r %s §b:§e https://www.spigotmc.org/resources/passwordlocker.113386/", Main.instance.getDescription().getName()));
@@ -133,6 +170,7 @@ public class PLocker implements CommandExecutor, TabCompleter {
                 switch(args[0].toLowerCase()) {
                     case "strictlock" -> { return List.of("~"); }
                     case "passwordenable" -> { return Arrays.asList("true", "false"); }
+                    case "disableworld" -> { return Bukkit.getWorlds().stream().map(WorldInfo::getName).toList(); }
                 }
             }
             case 3 -> { if(args[0].equalsIgnoreCase("strictlock")) return List.of("~"); }

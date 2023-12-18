@@ -4,15 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c1b6068-58d1-408a-b4cd-dcc49cc60e47" name="변경" comment="hopper &amp; password bug fix">
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/VersionChecker.java" afterDir="false" />
+    <list default="true" id="0c1b6068-58d1-408a-b4cd-dcc49cc60e47" name="변경" comment="hopper vulnerabilities fix &amp; version checker">
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/utils/UUIDAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Permissions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Permissions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/VersionChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/VersionChecker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/commands/PLocker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/commands/PLocker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ConfigManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ConfigManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/PasswordManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/PasswordManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,7 +90,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.PasswordLocker [build]">
+  <component name="RunManager" selected="Gradle.PasswordLocker [clean]">
     <configuration name="PasswordLocker [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -181,8 +181,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.PasswordLocker [build]" />
         <item itemvalue="Gradle.PasswordLocker [clean]" />
+        <item itemvalue="Gradle.PasswordLocker [build]" />
         <item itemvalue="Gradle.PasswordLocker [classes]" />
         <item itemvalue="Gradle.PasswordLocker [jar]" />
       </list>
@@ -201,7 +201,10 @@
       <workItem from="1699092007741" duration="14250000" />
       <workItem from="1699151935100" duration="124000" />
       <workItem from="1699162890808" duration="1063000" />
-      <workItem from="1699332601676" duration="2125000" />
+      <workItem from="1699332601676" duration="2657000" />
+      <workItem from="1699621206327" duration="4000" />
+      <workItem from="1701252338879" duration="24000" />
+      <workItem from="1702859571208" duration="2485000" />
     </task>
     <task id="LOCAL-00001" summary="upload">
       <created>1699025060529</created>
@@ -266,7 +269,14 @@
       <option name="project" value="LOCAL" />
       <updated>1699163957480</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="hopper vulnerabilities fix &amp; version checker">
+      <created>1699334995538</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1699334995538</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,6 +288,8 @@
     <MESSAGE value="password lock" />
     <MESSAGE value="sign to wall sign" />
     <MESSAGE value="hopper &amp; password bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="hopper &amp; password bug fix" />
+    <MESSAGE value="hopper vulnerabilities fix" />
+    <MESSAGE value="hopper vulnerabilities fix &amp; version checker" />
+    <option name="LAST_COMMIT_MESSAGE" value="hopper vulnerabilities fix &amp; version checker" />
   </component>
 </project>

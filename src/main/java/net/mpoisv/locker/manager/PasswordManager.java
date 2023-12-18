@@ -1,6 +1,6 @@
 package net.mpoisv.locker.manager;
 
-import com.mojang.util.UUIDTypeAdapter;
+import net.mpoisv.locker.utils.UUIDAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,7 +33,7 @@ public class PasswordManager {
         var x = Integer.parseInt(pos[0].substring(6));
         var y = Integer.parseInt(pos[1].substring(6));
         var z = Integer.parseInt(pos[2].substring(6));
-        var world = Bukkit.getWorld(UUIDTypeAdapter.fromString(lore.get(0).substring(2)));
+        var world = Bukkit.getWorld(Objects.requireNonNull(UUIDAdapter.fromString(lore.get(0).substring(2))));
         return new Location(world, x, y, z);
     }
 

@@ -21,6 +21,7 @@ lang:
   password_correct: '§aPassword Corrected. You allowed use block during %allow-time% minutes.'
   allow_only_block_use: '§ePassword Permission User allow only use/break block without sign.'
   password_user_sign_use: "§ePassword Permission User can't use sign for protected block."
+  world_empty: "§c%world% is not a world."
 
 # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 protect_blocks:
