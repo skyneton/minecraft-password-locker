@@ -157,13 +157,15 @@ public class EventManager implements Listener {
     @EventHandler
     private void onBlockPistonExtendEvent(BlockPistonExtendEvent event) {
         if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
+        event.setCancelled(true);
         event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
     }
 
     @EventHandler
     private void onBlockPistonRetractEvent(BlockPistonRetractEvent event) {
         if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
-        event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
+        event.setCancelled(true);
+//        event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
     }
 
     @EventHandler

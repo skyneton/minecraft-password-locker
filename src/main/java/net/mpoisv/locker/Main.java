@@ -104,7 +104,8 @@ public class Main extends JavaPlugin {
         }
         ConfigManager.langEmptyWorld = getOrDefault(config.getString("lang.world_empty"), "§c%world% is not a world.");
 
-        ConfigManager.disableWorlds.clear();
+        if(ConfigManager.disableWorlds == null) ConfigManager.disableWorlds = new HashSet<>();
+        else ConfigManager.disableWorlds.clear();
         ConfigManager.disableWorlds.addAll(config.getStringList("disable_worlds"));
     }
 }
