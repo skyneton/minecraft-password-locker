@@ -7,8 +7,8 @@
     <list default="true" id="0c1b6068-58d1-408a-b4cd-dcc49cc60e47" name="변경" comment="version update.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,8 +177,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.PasswordLocker [jar]" />
-        <item itemvalue="Gradle.PasswordLocker [build]" />
         <item itemvalue="Gradle.PasswordLocker [clean]" />
+        <item itemvalue="Gradle.PasswordLocker [build]" />
         <item itemvalue="Gradle.PasswordLocker [classes]" />
       </list>
     </recent_temporary>
@@ -200,7 +200,8 @@
       <workItem from="1699621206327" duration="4000" />
       <workItem from="1701252338879" duration="24000" />
       <workItem from="1702859571208" duration="3185000" />
-      <workItem from="1705074550807" duration="332000" />
+      <workItem from="1705074550807" duration="564000" />
+      <workItem from="1705211134133" duration="899000" />
     </task>
     <task id="LOCAL-00001" summary="upload">
       <created>1699025060529</created>
@@ -286,7 +287,14 @@
       <option name="project" value="LOCAL" />
       <updated>1702862380939</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="version update.">
+      <created>1705075100188</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1705075100188</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

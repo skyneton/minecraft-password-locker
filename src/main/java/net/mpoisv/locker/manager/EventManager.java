@@ -8,6 +8,7 @@ import net.mpoisv.locker.utils.Position;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.Powerable;
@@ -25,7 +26,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.util.Objects;
+import java.util.*;
 
 public class EventManager implements Listener {
     @EventHandler
@@ -156,16 +157,26 @@ public class EventManager implements Listener {
 
     @EventHandler
     private void onBlockPistonExtendEvent(BlockPistonExtendEvent event) {
-        if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
-        event.setCancelled(true);
-        event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
+        pistonEvent(event, event.getBlocks());
     }
 
     @EventHandler
     private void onBlockPistonRetractEvent(BlockPistonRetractEvent event) {
+        pistonEvent(event, event.getBlocks());
+    }
+
+    private void pistonEvent(BlockPistonEvent event, List<Block> blocks) {
         if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
-        event.setCancelled(true);
-//        event.getBlocks().removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
+
+        if(blocks instanceof ArrayList<Block> || blocks instanceof LinkedList<Block>) {
+            blocks.removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
+        }else {
+            for(Block block : blocks)
+                if(ProtectionManager.getFindPrivateSignRelative(block).isFind()) {
+                    event.setCancelled(true);
+                    break;
+                }
+        }
     }
 
     @EventHandler
