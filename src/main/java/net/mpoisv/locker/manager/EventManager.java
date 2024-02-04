@@ -13,7 +13,9 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.type.WallSign;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
@@ -100,6 +102,13 @@ public class EventManager implements Listener {
             player.openInventory(PasswordManager.getInventory(protection.signData().stream().findFirst().get().getLocation(), ""));
     }
 
+    private boolean containsMinecartHopper(Collection<Entity> entities) {
+        for(var entity : entities) {
+            if(entity instanceof HopperMinecart) return true;
+        }
+        return false;
+    }
+
     @EventHandler
     private void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
         var from = event.getSource().getLocation();
@@ -107,6 +116,10 @@ public class EventManager implements Listener {
         if(ConfigManager.disableWorlds.contains(from.getWorld().getName()) || ConfigManager.disableWorlds.contains(to.getWorld().getName())) return;
         var fromProtect = ProtectionManager.getFindPrivateSignRelative(from.getBlock());
         if(!fromProtect.isFind()) return;
+        if(to.getBlockX() != to.getX() || to.getBlockY() != to.getY() || to.getBlockZ() != to.getZ() || containsMinecartHopper(to.getWorld().getNearbyEntities(to, 0.05, 0.05, 0.05))) {
+            event.setCancelled(true);
+            return;
+        }
         var toProtect = ProtectionManager.getFindPrivateSignRelative(to.getBlock());
         if(toProtect.players().containsAll(fromProtect.players()) && fromProtect.players().size() == toProtect.players().size()) return;
         event.setCancelled(true);
@@ -167,7 +180,6 @@ public class EventManager implements Listener {
 
     private void pistonEvent(BlockPistonEvent event, List<Block> blocks) {
         if(ConfigManager.disableWorlds.contains(event.getBlock().getWorld().getName())) return;
-
         if(blocks instanceof ArrayList<Block> || blocks instanceof LinkedList<Block>) {
             blocks.removeIf(block -> ProtectionManager.getFindPrivateSignRelative(block).isFind());
         }else {

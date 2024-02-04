@@ -1,10 +1,7 @@
 package net.mpoisv.locker;
 
-import org.bukkit.Bukkit;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.System.Logger.Level;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
