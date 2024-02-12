@@ -133,6 +133,16 @@ public final class ProtectionManager {
         return new Protection(true, !list.isEmpty(), list, players);
     }
 
+    public static Protection getProtection(String[] lines) {
+        var players = new HashSet<String>();
+        var isProtection = false;
+        if(!(lines.length == 0 || !ConfigManager.privateTexts.contains(lines[0]))) {
+            players.addAll(Arrays.asList(lines).subList(1, lines.length));
+            isProtection = true;
+        }
+        return new Protection(isProtection, isProtection, new HashSet<>(), players);
+    }
+
     public static Protection getBreakablePrivateSignNearBy(Block b) {
         var list = new HashSet<Block>();
         var players = new HashSet<String>();

@@ -22,6 +22,7 @@ lang:
   allow_only_block_use: '§ePassword Permission User allow only use/break block without sign.'
   password_user_sign_use: "§ePassword Permission User can't use sign for protected block."
   world_empty: "§c%world% is not a world."
+  need_protection_contain_player: '§eThe password designation sign must include the name of the modifier.'
 
 # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 protect_blocks:

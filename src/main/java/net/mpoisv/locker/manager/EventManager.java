@@ -38,6 +38,15 @@ public class EventManager implements Listener {
             event.getPlayer().sendMessage(String.format("§b:§r %s §b:§e https://www.spigotmc.org/resources/passwordlocker.113386/", Main.instance.getDescription().getName()));
         }
     }
+
+    @EventHandler
+    private void onSignUpdate(SignChangeEvent event) {
+        var protection = ProtectionManager.getProtection(event.getLines());
+        if(ProtectionManager.isProtectedPassable(protection, event.getPlayer().getName())) return;
+        event.setCancelled(true);
+        event.getPlayer().sendMessage(ConfigManager.langNeedYouProtection);
+    }
+
     @EventHandler
     private void onInteractEvent(PlayerInteractEvent event) {
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK || ConfigManager.disableWorlds.contains(event.getPlayer().getWorld().getName())) return;

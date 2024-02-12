@@ -21,5 +21,6 @@ public class ConfigManager {
     public static String langPasswordCorrect;
     public static String langAllowOnlyBlockUse;
     public static String langPasswordUserSignUse;
+    public static String langNeedYouProtection;
     public static String langEmptyWorld;
 }
