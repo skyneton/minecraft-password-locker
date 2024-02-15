@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c1b6068-58d1-408a-b4cd-dcc49cc60e47" name="변경" comment="version update.">
+    <list default="true" id="0c1b6068-58d1-408a-b4cd-dcc49cc60e47" name="변경" comment="sign verify fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ConfigManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ConfigManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/EventManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ProtectionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/mpoisv/locker/manager/ProtectionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,6 +205,9 @@
       <workItem from="1707286061454" duration="10000" />
       <workItem from="1707301136869" duration="1118000" />
       <workItem from="1707707652217" duration="1784000" />
+      <workItem from="1707709532273" duration="42000" />
+      <workItem from="1707717940751" duration="648000" />
+      <workItem from="1707966412993" duration="1610000" />
     </task>
     <task id="LOCAL-00001" summary="upload">
       <created>1699025060529</created>
@@ -315,7 +314,14 @@
       <option name="project" value="LOCAL" />
       <updated>1707057952978</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="sign verify fix">
+      <created>1707709565225</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1707709565225</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -330,6 +336,7 @@
     <MESSAGE value="hopper vulnerabilities fix" />
     <MESSAGE value="hopper vulnerabilities fix &amp; version checker" />
     <MESSAGE value="version update." />
-    <option name="LAST_COMMIT_MESSAGE" value="version update." />
+    <MESSAGE value="sign verify fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="sign verify fix" />
   </component>
 </project>

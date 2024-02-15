@@ -48,6 +48,16 @@ public class EventManager implements Listener {
     }
 
     @EventHandler
+    private void onBlockPlace(BlockPlaceEvent event) {
+        if(event.getPlayer().hasPermission(Permissions.BYPASS_PERMISSION)) return;
+        var protection = ProtectionManager.getFindPrivateSignRelative(event.getBlock());
+        if(!protection.isFind() || protection.players().contains(event.getPlayer().getName()) || ProtectionManager.isAllowPlayer(Position.CreatePosition(protection.signData().stream().findFirst().get().getLocation()), event.getPlayer().getUniqueId())) return;
+        event.setCancelled(true);
+        if(ConfigManager.passwordEnabled)
+            event.getPlayer().openInventory(PasswordManager.getInventory(protection.signData().stream().findFirst().get().getLocation(), ""));
+    }
+
+    @EventHandler
     private void onInteractEvent(PlayerInteractEvent event) {
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK || ConfigManager.disableWorlds.contains(event.getPlayer().getWorld().getName())) return;
         var block = event.getClickedBlock();
